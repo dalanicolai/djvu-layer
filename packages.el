@@ -60,6 +60,7 @@
         "k"         'djvu-scroll-down-or-previous-page
         "J"         'djvu-next-page
         "K"         'djvu-prev-page
+        "g"         'djvu-goto-page
         )
       ;; (djvu-image-toggle)
       )))

@@ -16,7 +16,7 @@
 - [[#key-bindings][Key bindings]]
 
 * Description
-This layer adds support for reading djvu files with spacemacs.
+This layer adds support for reading djvu files with spacemacs. To read a djvu file open it and press =i= to toggle =djvu-image-mode=
 
 ** Features:
   - Autocomplete
@@ -40,6 +40,9 @@ this file.
 | ~i~           | djvu-image-toggle |
 | ~j~           | scroll up         |
 | ~k~           | scroll down       |
+| ~J~           | next page         |
+| ~K~           | previous page     |
+| ~g~           | goto page         |
 
 # Use GitHub URLs if you wish to link a Spacemacs documentation file or its heading.
 # Examples:
