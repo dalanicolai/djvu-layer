@@ -42,7 +42,7 @@
       ;; these following function do not work as intended
     (defun djvu-scroll-up-or-next-page ()
       (interactive)
-      (scroll-up-line 10)
+      (scroll-up-line 5)
       (when (= (window-vscroll) 0)
         (djvu-next-page 1)))
 

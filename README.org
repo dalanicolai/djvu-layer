@@ -25,9 +25,13 @@ This layer adds support for reading djvu files with spacemacs.
   - ...
 
 * Install
-To use this configuration layer, add it to your =~/.spacemacs=. You will need to
-add =djvu= to the existing =dotspacemacs-configuration-layers= list in this
-file.
+First download this repository to you private directory with
+#+BEGIN_SRC 
+  git clone https://github.com/dalanicolai/djvu-layer.git ~/.emacs.d/private/djvu
+#+END_SRC
+Subsequently to use this configuration layer, add it to your =~/.spacemacs=. You
+will need to add =djvu= to the existing =dotspacemacs-configuration-layers= list in
+this file.
 
 * Key bindings
 
