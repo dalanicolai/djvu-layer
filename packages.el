@@ -55,7 +55,7 @@
 
     :config
     (progn
-      (evilified-state-evilify djvu-mode djvu-read-mode-map
+      (evilified-state-evilify djvu-read-mode djvu-read-mode-map
         "j"         'djvu-scroll-up-or-next-page
         "k"         'djvu-scroll-down-or-previous-page
         "J"         'djvu-next-page
