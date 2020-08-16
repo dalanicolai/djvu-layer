@@ -16,13 +16,13 @@
 - [[#key-bindings][Key bindings]]
 
 * Description
-This layer adds support for reading djvu files with spacemacs. To read a djvu file open it and press =i= to toggle =djvu-image-mode=
+This layer adds support for reading djvu files with spacemacs. To read a djvu
+file open it and press =i= to toggle =djvu-image-mode=
 
 ** Features:
-  - Autocomplete
-  - Lint
-  - Refactor
-  - ...
+This layer implements the very powerful [[https://elpa.gnu.org/packages/djvu.html][djvu.el package]] which can be used for
+all kinds of editing. Additionally the layer implements two functions for
+convenient scrolling.
 
 * Install
 First download this repository to you private directory with
