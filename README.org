@@ -20,9 +20,9 @@ This layer adds support for reading djvu files with spacemacs. To read a djvu
 file open it and press =i= to toggle =djvu-image-mode=
 
 ** Features:
-This layer implements the very powerful [[https://elpa.gnu.org/packages/djvu.html][djvu.el package]] which can be used for
+This layer implements the very powerful [[https://github.com/dalanicolai/djvu2.el][djvu.el package]] which can be used for
 all kinds of editing. Additionally the layer implements two functions for
-convenient scrolling.
+convenient scrolling and a function to navigate conveniently via imenu (=SPC j i=)
 
 * Install
 First download this repository to you private directory with

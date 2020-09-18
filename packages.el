@@ -30,16 +30,17 @@
 ;;; Code:
 
 (defconst djvu-packages
-  '(djvu
-    ))
+  '((djvu :location (recipe
+                     :fetcher github
+                     :repo "dalanicolai/djvu2.el"))))
 
 (defun djvu/init-djvu ()
   (use-package djvu
     :defer t
     :init 
     (progn
-      ;; (add-hook 'djvu-read-mode-hook #'djvu-image-toggle)
-      ;; these following function do not work as intended
+      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-create-index-function 'spacemacs/djvu-imenu-create-index)))
+      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-default-goto-function (lambda (title page) (djvu-goto-page page djvu-doc)))))
     (defun djvu-scroll-up-or-next-page ()
       (interactive)
       (scroll-up-line 5)
@@ -55,6 +56,7 @@
 
     :config
     (progn
+      (advice-add 'djvu-find-file :after #'djvu-advise-image-toggle)
       (evilified-state-evilify djvu-read-mode djvu-read-mode-map
         "j"         'djvu-scroll-up-or-next-page
         "k"         'djvu-scroll-down-or-previous-page
@@ -62,10 +64,11 @@
         "K"         'djvu-prev-page
         "g"         'djvu-goto-page
         )
-      ;; (djvu-image-toggle)
       )))
-      ;; (evil-define-key djvu-read-mode-map "j" 'djvu-scroll-up-or-next-page)
-      ;; (evil-define-key djvu-read-mode-map "k" 'djvu-scroll-donw-or-previous-page))))
 
+(defun djvu/init-djvu-annots ()
+  (use-package djvu-annots
+    :defer t
+      ))
 
 ;;; packages.el ends here

@@ -1,0 +1,15 @@
+(when (configuration-layer/package-used-p 'djvu)
+
+  (defun spacemacs/djvu-imenu-create-index ()
+    (with-current-buffer (djvu-ref bookmarks-buf djvu-doc)
+      (goto-char (point-max))
+      (let (alist)
+        (while (re-search-backward "\"#p*\\([0-9]+\\).*\"" nil t)
+          (let ((pagenumber (string-to-number (match-string-no-properties 1))))
+            (re-search-backward "(\"\\(.+\\)\"")
+            (push (cons (match-string-no-properties 1) pagenumber) alist)))
+        alist)))
+
+  (defun djvu-advise-image-toggle (orig-func &rest args)
+    (djvu-image-toggle))
+)
