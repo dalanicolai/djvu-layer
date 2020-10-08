@@ -35,14 +35,17 @@ this file.
 
 * Key bindings
 
-| Key Binding | Description       |
-|-------------+-------------------|
-| ~i~           | djvu-image-toggle |
-| ~j~           | scroll up         |
-| ~k~           | scroll down       |
-| ~J~           | next page         |
-| ~K~           | previous page     |
-| ~g~           | goto page         |
+| Key Binding | Description          |
+|-------------+----------------------|
+| ~i~           | djvu-image-toggle    |
+| ~j~           | scroll up            |
+| ~k~           | scroll down          |
+| ~J~           | next page            |
+| ~K~           | previous page        |
+| ~g~           | goto page            |
+| =/=           | djvu fast search     |
+| =.=           | djvu search continue |
+| =, s=         | djvu-occur           |
 
 # Use GitHub URLs if you wish to link a Spacemacs documentation file or its heading.
 # Examples:

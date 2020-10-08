@@ -30,6 +30,7 @@
 ;;; Code:
 
 (defconst djvu-packages
+  ;; '(djvu)
   '((djvu :location (recipe
                      :fetcher github
                      :repo "dalanicolai/djvu2.el"))))
@@ -39,23 +40,24 @@
     :defer t
     :init 
     (progn
-      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-create-index-function 'spacemacs/djvu-imenu-create-index)))
+      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-create-index-function #'djvu-imenu-create-index)))
       (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-default-goto-function (lambda (title page) (djvu-goto-page page djvu-doc)))))
-    (defun djvu-scroll-up-or-next-page ()
-      (interactive)
-      (scroll-up-line 5)
-      (when (= (window-vscroll) 0)
-        (djvu-next-page 1)))
+      (defun djvu-scroll-up-or-next-page ()
+        (interactive)
+        (scroll-up-line 5)
+        (when (= (window-vscroll) 0)
+          (djvu-next-page 1)))
 
-    (defun djvu-scroll-down-or-previous-page ()
-      (interactive)
-      (if (not (= (window-vscroll) 0))
-          (scroll-down-line 5)
-        (djvu-prev-page 1)
-        (scroll-up-command))))
+      (defun djvu-scroll-down-or-previous-page ()
+        (interactive)
+        (if (not (= (window-vscroll) 0))
+            (scroll-down-line 5)
+          (djvu-prev-page 1)
+          (scroll-up-command))))
 
     :config
     (progn
+      (add-to-list 'spacemacs-large-file-modes-list 'djvu-read-mode t)
       (advice-add 'djvu-find-file :after #'djvu-advise-image-toggle)
       (evilified-state-evilify djvu-read-mode djvu-read-mode-map
         "j"         'djvu-scroll-up-or-next-page
@@ -63,12 +65,22 @@
         "J"         'djvu-next-page
         "K"         'djvu-prev-page
         "g"         'djvu-goto-page
+        "/"         'djvu-fast-search
+        "n"         'djvu-re-search-forward-continue
+        (kbd "C-o") 'djvu-history-backward
+        (kbd "C-i") 'djvu-history-forward
+        (kbd "SPC f s") 'djvu-save
         )
+      (spacemacs/set-leader-keys-for-major-mode 'djvu-read-mode "s" 'djvu-occur)
+
+      (define-key djvu-read-mode-map [remap save-buffer] 'djvu-save)
+
+      (evilified-state-evilify djvu-occur-mode djvu-occur-mode-map)
       )))
 
 (defun djvu/init-djvu-annots ()
   (use-package djvu-annots
     :defer t
-      ))
+    ))
 
 ;;; packages.el ends here
