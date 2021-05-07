@@ -30,57 +30,77 @@
 ;;; Code:
 
 (defconst djvu-packages
-  ;; '(djvu)
-  '((djvu :location (recipe
-                     :fetcher github
-                     :repo "dalanicolai/djvu2.el"))))
+  '(djvu
+    (djvu3 :location (recipe
+                      :fetcher github
+                      :repo "dalanicolai/djvu3"))))
 
 (defun djvu/init-djvu ()
   (use-package djvu
     :defer t
-    :init 
-    (progn
-      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-create-index-function #'djvu-imenu-create-index)))
-      (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-default-goto-function (lambda (title page) (djvu-goto-page page djvu-doc)))))
-      (defun djvu-scroll-up-or-next-page ()
-        (interactive)
-        (scroll-up-line 5)
-        (when (= (window-vscroll) 0)
-          (djvu-next-page 1)))
+    :magic ("%DJVU" . djvu-read-mode)))
 
-      (defun djvu-scroll-down-or-previous-page ()
-        (interactive)
-        (if (not (= (window-vscroll) 0))
-            (scroll-down-line 5)
-          (djvu-prev-page 1)
-          (scroll-up-command))))
+(defun djvu/init-djvu3 ()
+  (use-package djvu3
+    :after djvu
+    :init
+    (add-to-list 'spacemacs-large-file-modes-list 'djvu-read-mode t)
+    (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-create-index-function #'djvu-imenu-create-index)))
+    (add-hook 'djvu-read-mode-hook (lambda () (setq imenu-default-goto-function (lambda (title page) (djvu-goto-page page djvu-doc)))))
 
     :config
-    (progn
-      (add-to-list 'spacemacs-large-file-modes-list 'djvu-read-mode t)
-      (advice-add 'djvu-find-file :after #'djvu-advise-image-toggle)
-      (evilified-state-evilify djvu-read-mode djvu-read-mode-map
-        "j"         'djvu-scroll-up-or-next-page
-        "k"         'djvu-scroll-down-or-previous-page
-        "J"         'djvu-next-page
-        "K"         'djvu-prev-page
-        "g"         'djvu-goto-page
-        "/"         'djvu-fast-search
-        "n"         'djvu-re-search-forward-continue
-        (kbd "C-o") 'djvu-history-backward
-        (kbd "C-i") 'djvu-history-forward
-        (kbd "SPC f s") 'djvu-save
-        )
-      (spacemacs/set-leader-keys-for-major-mode 'djvu-read-mode "s" 'djvu-occur)
+    (advice-add 'djvu-find-file :after #'spacemacs/djvu-advise-image-toggle)
 
+    (evilified-state-evilify-map djvu-read-mode-map
+      :mode  djvu-read-mode
+      :bindings
+      "j" 'spacemacs/djvu-scroll-up-or-next-page
+      "k" 'spacemacs/djvu-scroll-down-or-previous-page
+      "J" 'djvu-next-page
+      "K" 'djvu-prev-page
+      "g" 'djvu-goto-page
+      "/" 'spacemacs/djvu-fast-search
+      "n" 'djvu-re-search-forward-continue
+      "H" 'djvu-history-backward
+      "L" 'djvu-history-forward
+      "c" 'djvu-toggle-semi-continuous-scrolling
+      "d" 'djvu-toggle-invert
+      "q" 'djvu-kill-doc)
+
+    (define-key djvu-image-mode-map "s" 'image-save)
+
+    (spacemacs/declare-prefix-for-mode 'djvu-read-mode "mb" "buffers")
+    (spacemacs/set-leader-keys-for-major-mode 'djvu-read-mode
+      "s" 'djvu-occur
+      "h" 'djvu-keyboard-annot
+      "bs" 'djvu-switch-shared
+      "bo" 'djvu-switch-outline
+      "bt" 'djvu-switch-text
+      "ba" 'djvu-switch-annot
+      "bb" 'djvu-switch-bookmarks)
+
+    ;; for some reason can not use dolist here
       (define-key djvu-read-mode-map [remap save-buffer] 'djvu-save)
+      (define-key djvu-script-mode-map [remap save-buffer] 'djvu-save)
+      (define-key djvu-outline-mode-map [remap save-buffer] 'djvu-save)
 
-      (evilified-state-evilify djvu-occur-mode djvu-occur-mode-map)
-      )))
+    (spacemacs/set-leader-keys-for-major-mode 'djvu-script-mode
+      "r" 'djvu-switch-read
+      "s" 'djvu-switch-shared
+      "o" 'djvu-switch-outline
+      "t" 'djvu-switch-text
+      "a" 'djvu-switch-annot
+      "b" 'djvu-switch-bookmarks)
 
-(defun djvu/init-djvu-annots ()
-  (use-package djvu-annots
-    :defer t
-    ))
+    (evilified-state-evilify-map djvu-outline-mode-map
+      :mode  djvu-outline-mode
+      :bindings
+      "q" 'djvu-quit-window)
+
+    (evilified-state-evilify-map djvu-occur-mode-map
+      :mode djvu-occur-mode
+      :bindings
+      (kbd "C-j") 'djvu-occur-next-entry-and-follow
+      (kbd "C-k") 'djvu-occur-previous-entry-and-follow)))
 
 ;;; packages.el ends here
